@@ -1,0 +1,6 @@
+[package]
+name = "bigdecimal"
+version = "0.1.0"
+authors = ["Omar Yasin <omarkj@gmail.com>"]
+
+[dependencies]
