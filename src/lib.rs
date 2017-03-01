@@ -1,6 +1,6 @@
 #[derive(Debug)]
 struct BigDecimal {
-    int_value: u64,
+    int_value: i64,
     scale: i32,
     precision: u8
 }
@@ -18,15 +18,15 @@ impl BigDecimal {
         BigDecimal{
             int_value: sum_value,
             scale: scale,
-            precision: (sum_value as f64).log(10.0).floor() as u8 + 1
+            precision: (sum_value.abs() as f64).log(10.0).floor() as u8 + 1
         }
     }
 
-    fn multiply_power_ten(&self, n: u32) -> u64 {
+    fn multiply_power_ten(&self, n: u32) -> i64 {
         if n <= 0 {
             self.int_value
         } else {
-            self.int_value * self.ten_to_ten(n)
+            self.int_value * (self.ten_to_ten(n) as i64)
         }
     }
 
@@ -51,6 +51,13 @@ mod tests {
         let bd1 = BigDecimal{ int_value: 19, scale: 0, precision: 2 };
         let bd2 = BigDecimal{ int_value: 19, scale: 1, precision: 2 };
         let expected = BigDecimal{ int_value: 209, scale: 1, precision: 3 };
+        assert_eq!(expected, bd1.add(&bd2));
+    }
+    #[test]
+    fn big_decimal_add1() {
+        let bd1 = BigDecimal{ int_value: -19, scale: 0, precision: 2 };
+        let bd2 = BigDecimal{ int_value: 19, scale: 1, precision: 2 };
+        let expected = BigDecimal{ int_value: -171, scale: 1, precision: 3 };
         assert_eq!(expected, bd1.add(&bd2));
     }
 }
