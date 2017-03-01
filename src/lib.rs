@@ -22,6 +22,10 @@ impl BigDecimal {
         }
     }
 
+    fn subtract(&self, augend: &BigDecimal) -> BigDecimal {
+        self.add(&augend.negate())
+    }
+
     fn multiply_power_ten(&self, n: u32) -> i64 {
         if n <= 0 {
             self.int_value
@@ -32,6 +36,14 @@ impl BigDecimal {
 
     fn ten_to_ten(&self, n: u32) -> u64 {
         (10 as u64).pow(n)
+    }
+
+    fn negate(&self) -> BigDecimal {
+        BigDecimal{
+            int_value: self.int_value * -1,
+            precision: self.precision,
+            scale: self.scale
+        }
     }
 }
 
@@ -53,11 +65,20 @@ mod tests {
         let expected = BigDecimal{ int_value: 209, scale: 1, precision: 3 };
         assert_eq!(expected, bd1.add(&bd2));
     }
+
     #[test]
-    fn big_decimal_add1() {
+    fn big_decimal_add_negative() {
         let bd1 = BigDecimal{ int_value: -19, scale: 0, precision: 2 };
         let bd2 = BigDecimal{ int_value: 19, scale: 1, precision: 2 };
         let expected = BigDecimal{ int_value: -171, scale: 1, precision: 3 };
         assert_eq!(expected, bd1.add(&bd2));
+    }
+
+    #[test]
+    fn big_decimal_subtract() {
+        let bd1 = BigDecimal{ int_value: 19, scale: 0, precision: 2 };
+        let bd2 = BigDecimal{ int_value: 19, scale: 1, precision: 2 };
+        let expected = BigDecimal{ int_value: 171, scale: 1, precision: 3 };
+        assert_eq!(expected, bd1.subtract(&bd2));
     }
 }
